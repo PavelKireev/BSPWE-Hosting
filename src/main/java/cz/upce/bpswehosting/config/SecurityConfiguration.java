@@ -54,15 +54,15 @@ public class SecurityConfiguration {
     public void postConstruct(
     ) throws IOException, CertificateException, KeyStoreException, NoSuchAlgorithmException, JOSEException {
         ClassPathResource ksFile =
-            new ClassPathResource("messenger-jwt.jks");
+            new ClassPathResource("bspwe-jwt.jks");
 
         File file = new File(ksFile.getPath());
         FileUtils.copyInputStreamToFile(ksFile.getInputStream(), file);
         RSAKey rsaKey = RSAKey.load(
             KeyStore.getInstance(
-                file, "messenger_pass".toCharArray()),
-            "messenger_jwt",
-            "messenger_pass".toCharArray());
+                file, "bspwe-pass".toCharArray()),
+            "bspwe-oauth-jwt",
+            "bspwe-pass".toCharArray());
 
         this.keyPair = rsaKey.toKeyPair();
     }
@@ -99,12 +99,12 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated())
-            .csrf((csrf) -> csrf.ignoringRequestMatchers("/api/auth"))
+            .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/auth"))
             .httpBasic(Customizer.withDefaults())
             .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-            .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .exceptionHandling((exceptions) -> exceptions
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(exceptions -> exceptions
                 .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                 .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
             );
@@ -124,7 +124,7 @@ public class SecurityConfiguration {
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        grantedAuthoritiesConverter.setAuthorityPrefix("");
+         grantedAuthoritiesConverter.setAuthorityPrefix("");
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
         return jwtAuthenticationConverter;

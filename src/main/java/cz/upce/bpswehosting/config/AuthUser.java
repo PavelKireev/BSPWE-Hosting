@@ -3,11 +3,13 @@ package cz.upce.bpswehosting.config;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cz.upce.bpswehosting.db.entity.User;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.io.Serial;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -15,9 +17,8 @@ import java.util.Objects;
 
 @Component
 @AllArgsConstructor
+@NoArgsConstructor
 public class AuthUser implements UserDetails {
-
-    private static final long serialVersionUID = 1L;
 
     private Long id;
     private String username;
@@ -83,5 +84,10 @@ public class AuthUser implements UserDetails {
             return false;
         AuthUser user = (AuthUser) o;
         return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUsername(), getPassword(), getAuthorities());
     }
 }

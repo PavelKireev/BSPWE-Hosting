@@ -6,6 +6,7 @@ import org.springframework.data.domain.Persistable;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@MappedSuperclass
 public abstract class AbstractEntity<P extends Serializable> implements Persistable<P>, Serializable {
 
     @Id
