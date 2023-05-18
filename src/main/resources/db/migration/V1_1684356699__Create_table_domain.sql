@@ -1,0 +1,15 @@
+-- CREATE TABLE domain (
+--    id BIGSERIAL PRIMARY KEY,
+--    owner_id TEXT NOT NULL,
+--    name TEXT NOT NULL,
+--    base_path TEXT NOT NULL,
+--    password TEXT NOT NULL,
+--    created_at TIMESTAMPTZ DEFAULT NOW(),
+--    updated_at TIMESTAMPTZ DEFAULT NOW()
+-- );
+--
+-- CREATE TABLE user_domain (
+--     id BIGSERIAL PRIMARY KEY,
+--     user_id BIGSERIAL NOT NULL,
+--     domain_id BIGSERIAL NOT NULL
+-- )

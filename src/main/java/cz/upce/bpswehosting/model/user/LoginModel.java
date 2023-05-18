@@ -1,4 +1,4 @@
-package cz.upce.bpswehosting.model;
+package cz.upce.bpswehosting.model.user;
 
 import lombok.Data;
 

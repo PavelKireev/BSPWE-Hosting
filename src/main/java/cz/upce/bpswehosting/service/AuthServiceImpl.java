@@ -1,11 +1,10 @@
 package cz.upce.bpswehosting.service;
 
-import cz.upce.bpswehosting.model.LoginModel;
-import cz.upce.bpswehosting.model.RegistrationModel;
+import cz.upce.bpswehosting.model.user.LoginModel;
+import cz.upce.bpswehosting.model.user.RegistrationModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -19,6 +18,7 @@ import java.util.stream.Collectors;
 public class AuthServiceImpl implements AuthService {
 
     private final JwtEncoder encoder;
+    private final UserService userService;
 
     @Override
     public String signIn(Authentication authentication, LoginModel model) {
