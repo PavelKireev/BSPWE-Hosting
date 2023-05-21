@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 
 @Slf4j
 @Component
-public class FtpConfiguration {
+public class FtpConnection {
 
     @Value("${ftp.server}")
     private String server;
