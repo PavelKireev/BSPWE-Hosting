@@ -1,8 +1,8 @@
 package cz.upce.bpswehosting.db.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Table(name = "users",
     uniqueConstraints = {@UniqueConstraint(columnNames = "username"),
@@ -16,6 +16,11 @@ public class User extends AbstractEntity<Long> {
     private String firstName;
     private String lastName;
 
+    @OneToMany
+    private List<Domain> ownedDomains;
+
+    @ManyToMany(mappedBy = "members")
+    private List<Domain> domains;
 
     public String getUsername() {
         return username;
@@ -52,4 +57,24 @@ public class User extends AbstractEntity<Long> {
         this.lastName = lastName;
         return this;
     }
+
+    public List<Domain> getOwnedDomains() {
+        return ownedDomains;
+    }
+
+    public User setOwnedDomains(List<Domain> ownedDomains) {
+        this.ownedDomains = ownedDomains;
+        return this;
+    }
+
+    public List<Domain> getDomains() {
+        return domains;
+    }
+
+    public User setDomains(List<Domain> domains) {
+        this.domains = domains;
+        return this;
+    }
+
+
 }

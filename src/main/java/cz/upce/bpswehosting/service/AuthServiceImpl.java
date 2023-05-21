@@ -39,6 +39,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void signUp(RegistrationModel model) {
-
+        userService.create(model);
     }
 }

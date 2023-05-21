@@ -4,6 +4,7 @@ import cz.upce.bpswehosting.db.entity.User;
 import cz.upce.bpswehosting.db.repository.UserRepository;
 import cz.upce.bpswehosting.model.user.RegistrationModel;
 import cz.upce.bpswehosting.model.user.UpdateProfileModel;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,11 @@ public class UserServiceImpl implements UserService {
 
     private PasswordEncoder encoder;
     private UserRepository userRepository;
+
+    @Override
+    public User getOne(Long id) {
+        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
 
     @Override
     public void create(RegistrationModel model) {

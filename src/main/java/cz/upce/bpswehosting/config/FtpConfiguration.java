@@ -23,7 +23,7 @@ public class FtpConfiguration {
     private String server;
     @Value("${ftp.port}")
     private int port;
-    @Value("${ftp.user}")
+    @Value("${ftp.username}")
     private String user;
     @Value("${ftp.password}")
     private String password;
@@ -33,7 +33,7 @@ public class FtpConfiguration {
 
     @PostConstruct
     public void init() throws IOException {
-
+        ftpClient = new FTPClient();
         ftpClient.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
 
         ftpClient.connect(server, port);
