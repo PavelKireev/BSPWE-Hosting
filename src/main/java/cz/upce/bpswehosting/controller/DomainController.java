@@ -5,7 +5,6 @@ import cz.upce.bpswehosting.db.entity.Domain;
 import cz.upce.bpswehosting.model.domain.CreateDomainModel;
 import cz.upce.bpswehosting.service.DomainService;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("domain")
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:4200")
 public class DomainController {
 
     private final DomainService domainService;

@@ -10,6 +10,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("file")
+@CrossOrigin("http://localhost:4200")
 public class FileController {
 
     private final FileService fileService;

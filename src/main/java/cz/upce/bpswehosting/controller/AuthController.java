@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("auth")
+@CrossOrigin("http://localhost:4200")
 public class AuthController {
 
     private final AuthService authService;
@@ -22,9 +23,9 @@ public class AuthController {
         return authService.signIn(authentication, model);
     }
 
-    @PostMapping
+    @PostMapping("sign-up")
     public void signUp(
-        RegistrationModel model
+        @RequestBody RegistrationModel model
     ) {
         authService.signUp(model);
     }
