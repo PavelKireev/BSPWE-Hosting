@@ -59,7 +59,7 @@ public class FileController {
         @RequestParam Long domainId
     ) throws IOException {
         OutputStream out = OutputStream.nullOutputStream();
-        return fileService.download(fileName, path, domainId, out);
+        return fileService.download(path, fileName, domainId, out);
     }
 
     @GetMapping("make-dir")
