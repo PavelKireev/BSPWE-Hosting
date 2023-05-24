@@ -52,7 +52,7 @@ public class FileController {
         );
     }
 
-    @PostMapping("download")
+    @GetMapping("download")
     public Resource downloadFile(
         @RequestParam String path,
         @RequestParam Long domainId
