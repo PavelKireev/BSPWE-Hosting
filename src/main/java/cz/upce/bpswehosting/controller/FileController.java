@@ -6,6 +6,7 @@ import cz.upce.bpswehosting.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -38,13 +39,16 @@ public class FileController {
 
     @PostMapping("upload")
     public DirectoryElement uploadFile(
-        @RequestBody FileUploadDto dto
+        @RequestBody MultipartFile data,
+        @RequestParam Long domainId,
+        @RequestParam String fileName,
+        @RequestParam String path
     ) throws IOException {
         return fileService.upload(
-            dto.getDomainId(),
-            dto.getData().getInputStream(),
-            dto.getFileName(),
-            dto.getPath()
+            domainId,
+            data.getInputStream(),
+            fileName,
+            path
         );
     }
 
