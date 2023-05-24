@@ -4,7 +4,12 @@ import cz.upce.bpswehosting.dto.DirectoryElement;
 import cz.upce.bpswehosting.dto.FileUploadDto;
 import cz.upce.bpswehosting.service.FileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,14 +57,14 @@ public class FileController {
         );
     }
 
-    @GetMapping("download")
-    public Resource downloadFile(
+    @GetMapping(value = "download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public byte[] downloadFile(
         @RequestParam String fileName,
         @RequestParam String path,
         @RequestParam Long domainId
     ) throws IOException {
         OutputStream out = OutputStream.nullOutputStream();
-        return fileService.download(path, fileName, domainId, out);
+        return fileService.download(path, fileName, domainId, out).getContentAsByteArray();
     }
 
     @GetMapping("make-dir")

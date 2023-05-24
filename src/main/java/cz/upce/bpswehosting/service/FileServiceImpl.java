@@ -39,7 +39,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public @ResponseBody Resource download(String path, String fileName, Long domainId, OutputStream out) {
+    public @ResponseBody InputStreamResource download(String path, String fileName, Long domainId, OutputStream out) {
         InputStream in = InputStream.nullInputStream();
         try {
             ftpConnection.getFtpClient()
