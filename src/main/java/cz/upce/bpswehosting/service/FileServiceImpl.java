@@ -93,11 +93,12 @@ public class FileServiceImpl implements FileService {
         DirectoryElement directoryElement = new DirectoryElement(folder, "folder", new ArrayList<>());
         Domain domain = domainService.getOne(domainId);
         try {
-            Arrays.stream(ftpConnection.getFtpClient().listDirectories(BASE_PATH + domain.getBasePath() + path))
+            ftpConnection.getFtpClient().changeWorkingDirectory(BASE_PATH + domain.getBasePath() + path);
+            Arrays.stream(ftpConnection.getFtpClient().listDirectories())
                   .forEach(
                       dir -> directoryElement.getChildren().add(new DirectoryElement(dir.getName(), "folder"))
                   );
-            Arrays.stream(ftpConnection.getFtpClient().listFiles(domain.getBasePath() + path))
+            Arrays.stream(ftpConnection.getFtpClient().listFiles())
                   .forEach(ftpFile -> directoryElement.getChildren()
                                                       .add(new DirectoryElement(ftpFile.getName(), "file"))
                   );
