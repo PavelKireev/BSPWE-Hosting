@@ -45,7 +45,7 @@ public class FileServiceImpl implements FileService {
                              BASE_PATH + domainService.getOne(domainId).getBasePath() + path
                          );
 
-            ftpConnection.getFtpClient().retrieveFile('/' + fileName, out);
+            ftpConnection.getFtpClient().retrieveFile(fileName, out);
             IOUtils.copy(in, out);
         } catch (IOException ex) {
             log.error(ex.getMessage());
