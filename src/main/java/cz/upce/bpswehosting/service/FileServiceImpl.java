@@ -44,9 +44,14 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public DirectoryElement createDirectory(Long domainId, String path, String name) throws IOException {
-        ftpConnection.getFtpClient().makeDirectory(path);
-        return listFiles(domainId, path);
+    public DirectoryElement createDirectory(Long domainId, String path, String name) {
+        try {
+            ftpConnection.getFtpClient().makeDirectory(path);
+            return listFiles(domainId, path);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            return null;
+        }
     }
 
     @Override
