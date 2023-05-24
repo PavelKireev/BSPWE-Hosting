@@ -3,6 +3,7 @@ package cz.upce.bpswehosting.config;
 import com.fasterxml.jackson.databind.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableWebMvc
@@ -18,5 +19,10 @@ public class WebConfiguration {
             )
             .propertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE)
             .build();
+    }
+
+    @Bean
+    public StandardServletMultipartResolver multipartResolver() {
+        return new StandardServletMultipartResolver();
     }
 }
