@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public InputStreamResource download(String path, String fileName, Long domainId, OutputStream out) {
+    public @ResponseBody Resource download(String path, String fileName, Long domainId, OutputStream out) {
         InputStream in = InputStream.nullInputStream();
         try {
             ftpConnection.getFtpClient()
