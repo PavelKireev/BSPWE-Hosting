@@ -76,8 +76,8 @@ public class DomainServiceImpl implements DomainService {
     private List<DomainDto> createDirectory(Long domainId, String path, String name) {
         Domain domain = domainRepository.findById(domainId).orElseThrow(EntityNotFoundException::new);
         try {
-            ftpConnection.getFtpClient().changeWorkingDirectory(BASE_PATH + domain.getBasePath() + path);
-            ftpConnection.getFtpClient().makeDirectory(name);
+            ftpConnection.getFtpClient().changeWorkingDirectory(BASE_PATH);
+            ftpConnection.getFtpClient().makeDirectory(domain.getBasePath().substring(1));
             return findAllByOwnerId(domain.getDomainOwner().getId());
         } catch (IOException ex) {
             log.error(ex.getMessage());
