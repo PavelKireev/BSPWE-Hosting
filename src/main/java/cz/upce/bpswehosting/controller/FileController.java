@@ -50,10 +50,11 @@ public class FileController {
 
     @PostMapping("download")
     public Resource downloadFile(
-        @RequestParam String path
+        @RequestParam String path,
+        @RequestParam Long domainId
     ) throws IOException {
         OutputStream out = OutputStream.nullOutputStream();
-        return fileService.download(path, out);
+        return fileService.download(path, domainId, out);
     }
 
     @GetMapping("make-dir")

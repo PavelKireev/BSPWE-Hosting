@@ -18,14 +18,16 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 
+    private static final String BASE_PATH = "/home/ftp_admin";
     private final FtpConnection ftpConnection;
     private final DomainService domainService;
 
     @Override
     public DirectoryElement upload(Long domainId, InputStream file, String fileName, String path) {
         try {
-            ftpConnection.getFtpClient().changeWorkingDirectory(domainService.getOne(domainId)
-                .getBasePath() + path);
+            ftpConnection.getFtpClient()
+                         .changeWorkingDirectory(
+                             BASE_PATH + domainService.getOne(domainId).getBasePath() + path);
             ftpConnection.getFtpClient().storeFile(fileName, file);
             return listFiles(domainId, path);
         } catch (IOException ex) {
@@ -35,9 +37,12 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public InputStreamResource download(String path, OutputStream out) {
+    public InputStreamResource download(String path, Long domainId, OutputStream out) {
         InputStream in = InputStream.nullInputStream();
         try {
+            ftpConnection.getFtpClient()
+                .changeWorkingDirectory(
+                    BASE_PATH + domainService.getOne(domainId).getBasePath() + path);
             ftpConnection.getFtpClient().retrieveFile(path, out);
             IOUtils.copy(in, out);
         } catch (IOException ex) {
@@ -65,7 +70,7 @@ public class FileServiceImpl implements FileService {
             ftpConnection.getFtpClient().makeDirectory(path);
             return listFiles(domainId, path);
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            log.error(ex.getMessage());
             return null;
         }
     }
@@ -73,8 +78,8 @@ public class FileServiceImpl implements FileService {
     @Override
     public DirectoryElement deleteDirectory(Long domainId, String path, String name) {
         try {
-            ftpConnection.getFtpClient().listDirectories();
-            ftpConnection.getFtpClient().removeDirectory(name);
+            Domain domain = domainService.getOne(domainId);
+            ftpConnection.getFtpClient().removeDirectory(BASE_PATH + domain.getBasePath() + path + '/' + name);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
@@ -88,11 +93,14 @@ public class FileServiceImpl implements FileService {
         DirectoryElement directoryElement = new DirectoryElement(folder, "folder", new ArrayList<>());
         Domain domain = domainService.getOne(domainId);
         try {
+            Arrays.stream(ftpConnection.getFtpClient().listDirectories(BASE_PATH + domain.getBasePath() + path))
+                  .forEach(
+                      dir -> directoryElement.getChildren().add(new DirectoryElement(dir.getName(), "folder"))
+                  );
             Arrays.stream(ftpConnection.getFtpClient().listFiles(domain.getBasePath() + path))
-                  .forEach(ftpFile -> directoryElement.getChildren().add(new DirectoryElement(
-                        ftpFile.getName(), resolveType(ftpFile.getType())
-                  ))
-                );
+                  .forEach(ftpFile -> directoryElement.getChildren()
+                                                      .add(new DirectoryElement(ftpFile.getName(), "file"))
+                  );
         } catch (IOException e) {
             log.error(e.getMessage());
         }
