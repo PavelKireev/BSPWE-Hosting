@@ -39,7 +39,7 @@ public class FileController {
 
     @PostMapping("upload")
     public DirectoryElement uploadFile(
-        @RequestBody MultipartFile file,
+        @RequestPart MultipartFile file,
         @RequestParam Long domainId,
         @RequestParam String fileName,
         @RequestParam String path
