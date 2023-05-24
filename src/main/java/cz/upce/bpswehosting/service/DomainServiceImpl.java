@@ -7,15 +7,19 @@ import cz.upce.bpswehosting.dto.DomainDto;
 import cz.upce.bpswehosting.model.domain.CreateDomainModel;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DomainServiceImpl implements DomainService {
 
+    private final FileService fileService;
     private final UserService userService;
     private final DomainRepository domainRepository;
 
@@ -25,7 +29,12 @@ public class DomainServiceImpl implements DomainService {
                                     .setBasePath('/' + model.getDomainName())
                                     .setDomainOwner(userService.getOne(model.getOwnerId()));
 
-        domainRepository.save(domain);
+        domain = domainRepository.save(domain);
+        try {
+            fileService.createDirectory(domain.getId(), "", domain.getBasePath());
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
         return findAllByOwnerId(model.getOwnerId());
     }
 
