@@ -54,11 +54,12 @@ public class FileController {
 
     @GetMapping("download")
     public Resource downloadFile(
+        @RequestParam String fileName,
         @RequestParam String path,
         @RequestParam Long domainId
     ) throws IOException {
         OutputStream out = OutputStream.nullOutputStream();
-        return fileService.download(path, domainId, out);
+        return fileService.download(fileName, path, domainId, out);
     }
 
     @GetMapping("make-dir")

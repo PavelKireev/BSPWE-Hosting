@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -38,7 +37,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public InputStreamResource download(String path, Long domainId, OutputStream out) {
+    public InputStreamResource download(String path, String fileName, Long domainId, OutputStream out) {
         InputStream in = InputStream.nullInputStream();
         try {
             ftpConnection.getFtpClient()
@@ -46,7 +45,7 @@ public class FileServiceImpl implements FileService {
                              BASE_PATH + domainService.getOne(domainId).getBasePath() + path
                          );
 
-            ftpConnection.getFtpClient().retrieveFile(path, out);
+            ftpConnection.getFtpClient().retrieveFile(fileName, out);
             IOUtils.copy(in, out);
         } catch (IOException ex) {
             log.error(ex.getMessage());
