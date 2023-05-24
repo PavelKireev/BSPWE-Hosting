@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -41,8 +42,10 @@ public class FileServiceImpl implements FileService {
         InputStream in = InputStream.nullInputStream();
         try {
             ftpConnection.getFtpClient()
-                .changeWorkingDirectory(
-                    BASE_PATH + domainService.getOne(domainId).getBasePath() + path);
+                         .changeWorkingDirectory(
+                             BASE_PATH + domainService.getOne(domainId).getBasePath() + path
+                         );
+
             ftpConnection.getFtpClient().retrieveFile(path, out);
             IOUtils.copy(in, out);
         } catch (IOException ex) {
@@ -54,9 +57,9 @@ public class FileServiceImpl implements FileService {
     @Override
     public DirectoryElement delete(Long domainId, String path, String name) {
         try {
-            ftpConnection.getFtpClient().changeWorkingDirectory('/' + domainService.getOne(domainId)
-                .getBasePath() + path);
-            ftpConnection.getFtpClient().deleteFile(path);
+            Domain domain = domainService.getOne(domainId);
+            ftpConnection.getFtpClient().changeWorkingDirectory(BASE_PATH + domain.getBasePath() + path);
+            ftpConnection.getFtpClient().deleteFile(name);
             return listFiles(domainId, path);
         } catch (IOException ex) {
             log.error(ex.getMessage());
@@ -67,7 +70,9 @@ public class FileServiceImpl implements FileService {
     @Override
     public DirectoryElement createDirectory(Long domainId, String path, String name) {
         try {
-            ftpConnection.getFtpClient().makeDirectory(path);
+            Domain domain = domainService.getOne(domainId);
+            ftpConnection.getFtpClient().changeWorkingDirectory(BASE_PATH + domain.getBasePath() + path);
+            ftpConnection.getFtpClient().makeDirectory(name);
             return listFiles(domainId, path);
         } catch (IOException ex) {
             log.error(ex.getMessage());
@@ -79,7 +84,9 @@ public class FileServiceImpl implements FileService {
     public DirectoryElement deleteDirectory(Long domainId, String path, String name) {
         try {
             Domain domain = domainService.getOne(domainId);
-            ftpConnection.getFtpClient().removeDirectory(BASE_PATH + domain.getBasePath() + path + '/' + name);
+            ftpConnection.getFtpClient().changeWorkingDirectory(BASE_PATH + domain.getBasePath() + path);
+            ftpConnection.getFtpClient().removeDirectory(name);
+
         } catch (IOException e) {
             log.error(e.getMessage());
         }
