@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DomainServiceImpl implements DomainService {
 
+    private static final String BASE_PATH = "/home/ftp_admin";
+
     private final FtpConnection ftpConnection;
     private final UserService userService;
     private final DomainRepository domainRepository;
@@ -74,7 +76,8 @@ public class DomainServiceImpl implements DomainService {
     private List<DomainDto> createDirectory(Long domainId, String path, String name) {
         Domain domain = domainRepository.findById(domainId).orElseThrow(EntityNotFoundException::new);
         try {
-            ftpConnection.getFtpClient().makeDirectory(path);
+            ftpConnection.getFtpClient().changeWorkingDirectory(BASE_PATH + domain.getBasePath() + path);
+            ftpConnection.getFtpClient().makeDirectory(name);
             return findAllByOwnerId(domain.getDomainOwner().getId());
         } catch (IOException ex) {
             log.error(ex.getMessage());
