@@ -5,13 +5,17 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(
+    name = "domain",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
 public class Domain extends AbstractEntity<Long> {
+
     private String name;
     private String basePath;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    private User owner;
+    private User domainOwner;
 
     @ManyToMany
     @JoinTable(
@@ -20,12 +24,12 @@ public class Domain extends AbstractEntity<Long> {
         inverseJoinColumns = @JoinColumn(name = "domain_id"))
     private List<User> members;
 
-    public User getOwner() {
-        return owner;
+    public User getDomainOwner() {
+        return domainOwner;
     }
 
-    public Domain setOwner(User owner) {
-        this.owner = owner;
+    public Domain setDomainOwner(User owner) {
+        this.domainOwner = owner;
         return this;
     }
 

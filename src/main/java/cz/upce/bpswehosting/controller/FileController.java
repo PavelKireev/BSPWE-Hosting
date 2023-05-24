@@ -20,7 +20,7 @@ public class FileController {
     private final FileService fileService;
 
     @GetMapping("list")
-    public List<DirectoryElement> list(
+    public DirectoryElement list(
         @RequestParam String path,
         @RequestParam Long domainId
     ) throws IOException {
@@ -28,7 +28,7 @@ public class FileController {
     }
 
     @GetMapping("delete")
-    public List<DirectoryElement> delete(
+    public DirectoryElement delete(
         @RequestParam String name,
         @RequestParam String path,
         @RequestParam Long domainId
@@ -37,12 +37,12 @@ public class FileController {
     }
 
     @PostMapping("upload")
-    public List<DirectoryElement> uploadFile(
+    public DirectoryElement uploadFile(
         @RequestBody FileUploadDto dto
     ) throws IOException {
         return fileService.upload(
             dto.getDomainId(),
-            dto.getFile().getInputStream(),
+            dto.getData().getInputStream(),
             dto.getFileName(),
             dto.getPath()
         );
@@ -57,7 +57,7 @@ public class FileController {
     }
 
     @GetMapping("make-dir")
-    public List<DirectoryElement> makeDir(
+    public DirectoryElement makeDir(
         @RequestParam Long domainId,
         @RequestParam String path,
         @RequestParam String name
@@ -66,7 +66,7 @@ public class FileController {
     }
 
     @GetMapping("remove-dir")
-    public List<DirectoryElement> removeDir(
+    public DirectoryElement removeDir(
         @RequestParam Long domainId,
         @RequestParam String path,
         @RequestParam String name

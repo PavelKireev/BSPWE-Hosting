@@ -3,12 +3,14 @@ package cz.upce.bpswehosting.service;
 import cz.upce.bpswehosting.db.entity.Domain;
 import cz.upce.bpswehosting.db.entity.User;
 import cz.upce.bpswehosting.db.repository.DomainRepository;
+import cz.upce.bpswehosting.dto.DomainDto;
 import cz.upce.bpswehosting.model.domain.CreateDomainModel;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,12 +20,13 @@ public class DomainServiceImpl implements DomainService {
     private final DomainRepository domainRepository;
 
     @Override
-    public void create(CreateDomainModel model) {
-        Domain domain = new Domain().setName(model.getName())
-                                    .setBasePath('/' + model.getName())
-                                    .setOwner(userService.getOne(model.getOwnerId()));
+    public List<DomainDto> create(CreateDomainModel model) {
+        Domain domain = new Domain().setName(model.getDomainName())
+                                    .setBasePath('/' + model.getDomainName())
+                                    .setDomainOwner(userService.getOne(model.getOwnerId()));
 
         domainRepository.save(domain);
+        return findAllByOwnerId(model.getOwnerId());
     }
 
     @Override
@@ -48,8 +51,16 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public List<Domain> findAllByOwnerId(Long ownerId) {
-        return domainRepository.findAllByOwnerId(ownerId);
+    public List<DomainDto> findAllByOwnerId(Long ownerId) {
+        return domainRepository.findAllByDomainOwnerId(ownerId)
+                               .stream()
+                               .map(DomainDto::new)
+                               .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Domain> findAllByOwnerUsername(String username) {
+        return domainRepository.findAllByDomainOwnerUsername(username);
     }
 
 }

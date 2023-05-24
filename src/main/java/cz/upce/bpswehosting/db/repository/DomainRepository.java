@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface DomainRepository extends CrudRepository<Domain, Long> {
 
-    List<Domain> findAllByOwnerId(Long ownerId);
+    List<Domain> findAllByDomainOwnerId(Long ownerId);
+    List<Domain> findAllByDomainOwnerUsername(String username);
 }

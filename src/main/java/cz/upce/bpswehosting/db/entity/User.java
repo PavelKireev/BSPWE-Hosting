@@ -16,7 +16,7 @@ public class User extends AbstractEntity<Long> {
     private String firstName;
     private String lastName;
 
-    @OneToMany
+    @OneToMany(mappedBy = "domainOwner")
     private List<Domain> ownedDomains;
 
     @ManyToMany(mappedBy = "members")

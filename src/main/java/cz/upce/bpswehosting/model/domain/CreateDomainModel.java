@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class CreateDomainModel {
-    private String name;
+    private String domainName;
     private Long ownerId;
 }

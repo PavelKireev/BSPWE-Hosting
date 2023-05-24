@@ -1,5 +1,6 @@
 package cz.upce.bpswehosting.service;
 
+import cz.upce.bpswehosting.config.AuthUser;
 import cz.upce.bpswehosting.model.user.LoginModel;
 import cz.upce.bpswehosting.model.user.RegistrationModel;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String signIn(Authentication authentication, LoginModel model) {
+        AuthUser authUser = (AuthUser) authentication.getPrincipal();
         Instant now = Instant.now();
         long expiry = 36000L;
         String scope = authentication.getAuthorities().stream()
@@ -33,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
             .expiresAt(now.plusSeconds(expiry))
             .subject(authentication.getName())
             .claim("scope", scope)
+            .claim("userId", authUser.getId())
             .build();
         return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }

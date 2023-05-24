@@ -1,8 +1,8 @@
 CREATE TABLE domain (
    id BIGSERIAL PRIMARY KEY,
-   owner_id TEXT NOT NULL,
-   name TEXT NOT NULL,
-   base_path TEXT NOT NULL,
+   owner_id BIGSERIAL NOT NULL,
+   name TEXT UNIQUE NOT NULL,
+   base_path TEXT UNIQUE NOT NULL,
    created_at TIMESTAMPTZ DEFAULT NOW(),
    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
