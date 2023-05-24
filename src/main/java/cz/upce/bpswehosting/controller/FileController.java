@@ -39,14 +39,14 @@ public class FileController {
 
     @PostMapping("upload")
     public DirectoryElement uploadFile(
-        @RequestBody MultipartFile data,
+        @RequestBody MultipartFile file,
         @RequestParam Long domainId,
         @RequestParam String fileName,
         @RequestParam String path
     ) throws IOException {
         return fileService.upload(
             domainId,
-            data.getInputStream(),
+            file.getInputStream(),
             fileName,
             path
         );
